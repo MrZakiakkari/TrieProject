@@ -40,23 +40,12 @@ EntryType* TrieType::TrieSearch(Key target)
 
 	return current->ref;
 }
-Trienode* CreateNode()
-{
-	int ch;
-	Trienode* newnode = new Trienode;
-	for (ch = 0; ch < LETTERS; ch++)
-		newnode->branch[ch] = NULL;
-
-	newnode->ref = NULL;
-
-	return newnode;
-}
 void TrieType::InsertTrie(Key newkey, EntryType* newentry)
 {
 	int i;
 	Trienode* current;
 	if (!root)
-		root = CreateNode();
+		root = new Trienode();
 	current = root;
 	for (i = 0; i < MAXLENGTH; i++)
 		if (newkey[i] == '\0')
@@ -64,7 +53,7 @@ void TrieType::InsertTrie(Key newkey, EntryType* newentry)
 		else
 		{
 			if (!current->branch[newkey[i] - 'a'])
-				current->branch[newkey[i] - 'a'] = CreateNode();
+				current->branch[newkey[i] - 'a'] = new Trienode();
 			current = current->branch[newkey[i] - 'a'];
 		}
 	if (current->ref != NULL)
