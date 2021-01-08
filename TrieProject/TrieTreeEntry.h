@@ -15,4 +15,11 @@ public:
 	bool operator!= (const EntryType& item) const;
 private:
 	char entryKey[MAXLENGTH];
-}; 
+};
+	struct Person
+	{
+		string firstname;
+		string surname;
+		int age;
+	};
+

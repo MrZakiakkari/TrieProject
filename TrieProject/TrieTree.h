@@ -2,8 +2,7 @@
 #include <iostream>
 #include "TrieTreeEntry.h"
 #include "TrieTreeNode.h"
-namespace DataStructures
-{
+#include <stack>;
 	using namespace std;
 	typedef char Key[MAXLENGTH];
 	class TrieType
@@ -11,16 +10,24 @@ namespace DataStructures
 	public:
 		TrieType();
 		~TrieType();
-		TrieType(TrieType& originalTree);
-		void operator=(TrieType& originalTree);
 		void MakeEmpty();
 		void InsertTrie(Key newkey, EntryType* newentry);
 		EntryType* TrieSearch(Key target);
 		bool DeleteTrie(Key delkey);
 		void PrintTrie(ostream& outfile) const;
+		void PrintTrie() const;
+
 	private:
 		Trienode* root;
 	};
+	TrieType::TrieType()
+	{
+		root = NULL;
+	}
+	TrieType::~TrieType()
+	{
+		root = NULL;
+	}
 	EntryType* TrieType::TrieSearch(Key target)
 	{
 		Trienode* current = root;
@@ -37,6 +44,64 @@ namespace DataStructures
 			return NULL;
 
 		return current->ref;
+	}
+	bool TrieType::DeleteTrie(Key target)
+	{
+		if (root == NULL)
+			return false;
+
+		Trienode* iterator = root;
+
+		stack<Trienode*>* targetPathStack = new stack<Trienode*>();
+		targetPathStack->push(iterator);
+
+		for (int i = 0; i < MAXLENGTH && iterator; i++)
+		{
+			if (target[i] == '\0')
+				break;
+			else
+			{
+				iterator = iterator->branch[target[i] - 'a'];
+				targetPathStack->push(iterator);
+			}
+		}
+		if (iterator == NULL) {
+			return false;
+		}
+		else {
+			iterator->ref = NULL;
+			deleteEmptyNodes(targetPathStack);
+			return true;
+		}
+	}
+
+	void TrieType::PrintTrie() const
+	{
+		cout << "Demo Print";
+	}
+	void TrieType::PrintTrie(ostream& outfile) const
+	{
+		cout << "Demo Print";
+	}
+	void deleteEmptyNodes(stack<Trienode*>* targetPathStack)
+	{
+		while (!targetPathStack->empty())
+		{
+			Trienode* node = targetPathStack->top();
+			targetPathStack->pop();
+			if (node->IsEmpty())
+			{
+				delete node;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	void TrieType::MakeEmpty()
+	{
+		root = NULL;
 	}
 	void TrieType::InsertTrie(Key newkey, EntryType* newentry)
 	{
@@ -59,4 +124,3 @@ namespace DataStructures
 		else
 			current->ref = newentry;
 	}
-}
